@@ -15,6 +15,7 @@ logs/
 
 # Databases
 var/db/*.db
+global/var/db/*.db
 *.sqlite
 *.sqlite3
 

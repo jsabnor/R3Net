@@ -1,0 +1,20 @@
+{
+  "name": "r3net-telegram-bot",
+  "version": "1.0.0",
+  "description": "Bot de Telegram maestro para R3Net",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node bot.js",
+    "dev": "node bot.js"
+  },
+  "dependencies": {
+    "node-telegram-bot-api": "^0.66.0",
+    "mqtt": "^4.3.7",
+    "dotenv": "^16.4.5"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "author": "R3Net Team",
+  "license": "MIT"
+}

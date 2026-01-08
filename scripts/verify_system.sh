@@ -26,7 +26,7 @@ check "node --version > /dev/null" "Node.js instalado"
 check "systemctl is-active --quiet mosquitto" "Mosquitto corriendo"
 
 # WireGuard (si configurado)
-if wg show wg0 &> /dev/null; then
+if sudo wg show wg0 &> /dev/null; then
     check "true" "WireGuard wg0 activo"
 else
     echo -e "${RED}✗${NC} WireGuard wg0 no configurado"

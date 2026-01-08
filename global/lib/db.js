@@ -24,6 +24,14 @@ export async function initDB(path) {
       retries INTEGER DEFAULT 0,
       max_retries INTEGER DEFAULT 5
     );
+
+    CREATE TABLE IF NOT EXISTS users (
+      indicativo TEXT PRIMARY KEY,
+      pubkey TEXT NOT NULL,
+      registered_at INTEGER,
+      last_seen INTEGER,
+      telegram_id TEXT
+    );
   `);
 
   console.log('Base de datos global inicializada');
@@ -61,4 +69,29 @@ export async function incrementRetries(id) {
 export async function removeStoreForward(id) {
   const stmt = db.prepare('DELETE FROM storeforward WHERE id = ?');
   stmt.run(id);
+}
+
+// Funciones para usuarios
+export async function registerUser(indicativo, pubkey, telegramId = null) {
+  const now = Math.floor(Date.now() / 1000);
+  const stmt = db.prepare(
+    'INSERT OR REPLACE INTO users (indicativo, pubkey, registered_at, last_seen, telegram_id) VALUES (?, ?, ?, ?, ?)'
+  );
+  stmt.run(indicativo, pubkey, now, now, telegramId);
+}
+
+export async function getUser(indicativo) {
+  const stmt = db.prepare('SELECT * FROM users WHERE indicativo = ?');
+  return stmt.get(indicativo);
+}
+
+export async function getAllUsers() {
+  const stmt = db.prepare('SELECT indicativo, pubkey, registered_at, last_seen FROM users');
+  return stmt.all();
+}
+
+export async function updateUserLastSeen(indicativo) {
+  const now = Math.floor(Date.now() / 1000);
+  const stmt = db.prepare('UPDATE users SET last_seen = ? WHERE indicativo = ?');
+  stmt.run(now, indicativo);
 }

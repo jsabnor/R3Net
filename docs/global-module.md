@@ -107,6 +107,24 @@ Usa `curl` para verificar la API HTTP:
   ```
   Respuesta: Array de mensajes pendientes.
 
+- Registrar un usuario:
+  ```bash
+  curl -X POST http://localhost:8080/register -H "Content-Type: application/json" -d '{"indicativo":"EA7XXX","pubkey":"clave_publica_ed25519"}'
+  ```
+  Respuesta: `{"status":"registered","indicativo":"EA7XXX"}`
+
+- Listar usuarios registrados:
+  ```bash
+  curl http://localhost:8080/users
+  ```
+  Respuesta: Array de usuarios.
+
+- Obtener detalles de un usuario:
+  ```bash
+  curl http://localhost:8080/users/EA7XXX
+  ```
+  Respuesta: Detalles del usuario o 404 si no existe.
+
 ### 8. Logs y Monitoreo
 - Logs de aplicación: Se imprimen en consola. Con systemd, usa:
   ```bash

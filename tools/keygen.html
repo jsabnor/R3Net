@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Generador de Claves R3Net</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px; }
+        button { padding: 10px 20px; margin: 10px 0; cursor: pointer; }
+        textarea { width: 100%; height: 100px; margin: 10px 0; }
+        .warning { color: red; font-weight: bold; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Generador de Claves Ed25519 para R3Net</h1>
+    <p>Esta herramienta genera un par de claves Ed25519 para tu uso en R3Net. Las claves se crean localmente en tu navegador y no se envían a ningún servidor.</p>
+
+    <button id="generateBtn">Generar Claves</button>
+
+    <div id="output" style="display: none;">
+        <h2>Claves Generadas</h2>
+        <p class="warning">¡Importante! Guarda la clave privada en un lugar seguro. No la compartas con nadie. Si la pierdes, no podrás recuperar tus mensajes.</p>
+
+        <label>Clave Privada (descárgala):</label><br>
+        <textarea id="privateKey" readonly></textarea>
+        <button id="downloadBtn">Descargar Clave Privada</button>
+
+        <label>Clave Pública (cópiala para registrar en R3Net):</label><br>
+        <textarea id="publicKey" readonly></textarea>
+        <button onclick="navigator.clipboard.writeText(document.getElementById('publicKey').value)">Copiar Pública</button>
+
+        <p class="success" id="successMsg" style="display: none;">Claves generadas exitosamente. Registra la pública en el VPS de R3Net.</p>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/tweetnacl@1.0.3/nacl.min.js"></script>
+    <script>
+        document.getElementById('generateBtn').addEventListener('click', generateKeys);
+
+        function generateKeys() {
+            const keyPair = nacl.sign.keyPair();
+            const privateKeyHex = nacl.util.encodeBase64(keyPair.secretKey);
+            const publicKeyHex = nacl.util.encodeBase64(keyPair.publicKey);
+
+            document.getElementById('privateKey').value = privateKeyHex;
+            document.getElementById('publicKey').value = publicKeyHex;
+            document.getElementById('output').style.display = 'block';
+            document.getElementById('successMsg').style.display = 'block';
+        }
+
+        document.getElementById('downloadBtn').addEventListener('click', function() {
+            const privateKey = document.getElementById('privateKey').value;
+            const blob = new Blob([JSON.stringify({ privateKey: privateKey }, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'r3net_private_key.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        });
+    </script>
+</body>
+</html></content>
+<parameter name="filePath">/home/j0s3m4/r3net/tools/keygen.html

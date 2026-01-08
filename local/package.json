@@ -1,0 +1,23 @@
+{
+  "name": "r3net-local",
+  "version": "1.0.0",
+  "description": "Módulo local R3Net - r3-hub para conectar clientes y enrutar mensajes",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "ws": "^8.14.2",
+    "mqtt": "^5.3.4",
+    "dotenv": "^16.3.1",
+    "tweetnacl": "^1.0.3",
+    "uuid": "^9.0.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "author": "R3Net Team",
+  "license": "MIT"
+}

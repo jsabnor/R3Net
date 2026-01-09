@@ -9,6 +9,7 @@ export function handleClientConnection(ws, mqttClient) {
   let userPubkey = null;
 
   ws.on('message', (data) => {
+    console.log('Datos recibidos del cliente:', data.toString());
     try {
       const message = JSON.parse(data.toString());
 

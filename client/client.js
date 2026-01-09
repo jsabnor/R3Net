@@ -6,7 +6,15 @@ import readline from 'readline';
 import { createInterface } from 'readline';
 
 // Configuración
-const HUB_URL = 'ws://localhost:8082'; // Cambia si r3-hub no está local
+const CONFIG_FILE = './config.json';
+let HUB_URL = 'ws://localhost:8082'; // Default
+
+try {
+  const config = JSON.parse(fs.readFileSync(CONFIG_FILE, 'utf8'));
+  HUB_URL = config.hubUrl || HUB_URL;
+} catch (error) {
+  console.log('Usando configuración por defecto (config.json no encontrado)');
+}
 const PRIVATE_KEY_FILE = './r3net_private_key.json'; // Archivo descargado de keygen.html
 
 // Cargar clave privada
@@ -16,7 +24,6 @@ try {
   if (fileContent.charCodeAt(0) === 0xFEFF) {
     fileContent = fileContent.slice(1); // Quitar BOM
   }
-  console.log('Contenido del archivo:', fileContent);
   const keyData = JSON.parse(fileContent);
   privateKey = Buffer.from(keyData.privateKey, 'base64');
   publicKey = nacl.sign.keyPair.fromSecretKey(privateKey).publicKey;
@@ -42,7 +49,7 @@ ws.on('open', () => {
   const registerMsg = {
     type: 'register',
     indicativo: indicativo,
-    pubkey: nacl.util.encodeBase64(publicKey)
+    pubkey: Buffer.from(publicKey).toString('base64')
   };
   ws.send(JSON.stringify(registerMsg));
 });
@@ -108,8 +115,8 @@ function startCLI() {
         timestamp: message.timestamp,
         payload: message.payload
       });
-      const signature = nacl.sign.detached(nacl.util.decodeUTF8(msgStr), privateKey);
-      message.signature = nacl.util.encodeBase64(signature);
+      const signature = nacl.sign.detached(Buffer.from(msgStr, 'utf8'), privateKey);
+      message.signature = Buffer.from(signature).toString('base64');
 
       // Enviar
       ws.send(JSON.stringify(message));

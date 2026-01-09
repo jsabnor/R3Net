@@ -12,11 +12,13 @@ const PRIVATE_KEY_FILE = './r3net_private_key.json'; // Archivo descargado de ke
 // Cargar clave privada
 let privateKey, publicKey;
 try {
-  const keyData = JSON.parse(fs.readFileSync(PRIVATE_KEY_FILE, 'utf8'));
+  const fileContent = fs.readFileSync(PRIVATE_KEY_FILE, 'utf8');
+  console.log('Contenido del archivo:', fileContent);
+  const keyData = JSON.parse(fileContent);
   privateKey = nacl.util.decodeBase64(keyData.privateKey);
   publicKey = nacl.sign.keyPair.fromSecretKey(privateKey).publicKey;
 } catch (error) {
-  console.error('Error cargando clave privada. Asegúrate de tener r3net_private_key.json');
+  console.error('Error cargando clave privada:', error.message);
   process.exit(1);
 }
 

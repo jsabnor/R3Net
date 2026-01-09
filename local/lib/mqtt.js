@@ -25,6 +25,10 @@ export async function initMQTT() {
       resolve(client);
     });
 
+    client.on('disconnect', () => {
+      console.log('r3-hub desconectado de MQTT');
+    });
+
     client.on('error', (err) => {
       console.error('Error MQTT en r3-hub:', err);
       reject(err);

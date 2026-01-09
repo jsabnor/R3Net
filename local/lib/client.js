@@ -44,13 +44,13 @@ export function handleClientConnection(ws, mqttClient) {
           timestamp: Math.floor(Date.now() / 1000)
         };
 
-        console.log('Enrutando mensaje:', routedMessage);
         // Publicar via MQTT
-        mqttClient.publish('r3net/global/messages', JSON.stringify(routedMessage), { qos: 1 }, (err) => {
+        const simpleMessage = { test: 'hola desde r3hub', timestamp: Date.now() };
+        mqttClient.publish('r3net/global/messages', JSON.stringify(simpleMessage), { qos: 1 }, (err) => {
           if (err) {
             console.error('ERROR publicando MQTT:', err);
           } else {
-            console.log('Mensaje publicado OK en MQTT');
+            console.log('Mensaje simple publicado OK en MQTT');
           }
         });
 

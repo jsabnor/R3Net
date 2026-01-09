@@ -4,10 +4,11 @@ const MQTT_URL = process.env.R3NET_MQTT_URL;
 const REGION = process.env.R3NET_REGION || 'default';
 
 export async function initMQTT() {
-  const options = {
-    username: process.env.R3NET_MQTT_USER || 'r3net',
-    password: process.env.R3NET_MQTT_PASS || 'r3net'
-  };
+  const options = {};
+  if (process.env.R3NET_MQTT_USER) {
+    options.username = process.env.R3NET_MQTT_USER;
+    options.password = process.env.R3NET_MQTT_PASS;
+  }
   
   const client = mqtt.connect(MQTT_URL, options);
 

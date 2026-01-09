@@ -47,7 +47,7 @@ export function handleClientConnection(ws, mqttClient) {
         };
 
         // Publicar via TCP
-        const success = publish('r3net/global/messages', JSON.stringify(simpleMessage));
+        const success = publish('r3net/global/messages', JSON.stringify(routedMessage));
         if (success) {
           console.log('Mensaje enviado via TCP');
         } else {

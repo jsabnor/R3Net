@@ -71,12 +71,15 @@ Para despliegues completos, configura nodos regionales y locales conectados por 
 - Recibe notificaciones en Telegram si configurado.
 
 ## Documentación
-- [Instalación de Dependencias](docs/install_dependencies.md)
-- [Configuración del Sistema](docs/configure_r3net.md)
-- [Módulo Global](docs/global-module.md)
-- [Bot de Telegram](docs/telegram-bot.md)
-- [Arquitectura Detallada](docs/architecture.md) (futuro)
-- [Guía de Pruebas](docs/testing.md) (futuro)
+- [Recopilación Completa](docs/recopilacion_completa.md): Visión general del sistema y estado actual.
+- [Instalación de Dependencias](docs/install_dependencies.md): Detalles técnicos de instalación.
+- [Configuración Interactiva](docs/configure_r3net.md): Guía paso a paso para configurar el sistema.
+- [Módulo Global](docs/global-module.md): Documentación del nodo maestro.
+- [Módulo Regional](docs/regional-module.md): Detalles del nodo regional.
+- [Módulo Local](docs/local-module.md): Documentación del r3-hub.
+- [Bot de Telegram](docs/telegram-bot.md): Integración con Telegram.
+- [Herramienta de Claves](docs/keygen-tool.md): Generación de claves Ed25519.
+- [Solución de Problemas](docs/troubleshooting.md): Problemas comunes y soluciones.
 
 ## Contribución
 Contribuciones son bienvenidas. Sigue la guía de estilo: Node.js moderno, async/await, logs claros. Crea issues para bugs o features.

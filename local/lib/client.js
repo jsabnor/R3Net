@@ -43,9 +43,8 @@ export function handleClientConnection(ws, mqttClient) {
         };
 
         // Publicar via MQTT
-        const regionTopic = `r3net/region/${process.env.R3NET_REGION}/messages`;
-        mqttClient.publish(regionTopic, JSON.stringify(routedMessage));
-        console.log(`Mensaje publicado en MQTT: ${regionTopic} - ${JSON.stringify(routedMessage)}`);
+        mqttClient.publish('r3net/global/messages', JSON.stringify(routedMessage));
+        console.log(`Mensaje publicado en MQTT: ${JSON.stringify(routedMessage)}`);
 
         ws.send(JSON.stringify({ type: 'sent', id: routedMessage.id }));
 

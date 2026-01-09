@@ -18,8 +18,7 @@ try {
   }
   console.log('Contenido del archivo:', fileContent);
   const keyData = JSON.parse(fileContent);
-  console.log('nacl:', typeof nacl, nacl);
-  privateKey = nacl.util.decodeBase64(keyData.privateKey);
+  privateKey = Buffer.from(keyData.privateKey, 'base64');
   publicKey = nacl.sign.keyPair.fromSecretKey(privateKey).publicKey;
 } catch (error) {
   console.error('Error cargando clave privada:', error.message);

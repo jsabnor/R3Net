@@ -45,12 +45,16 @@ export function handleClientConnection(ws, mqttClient) {
         };
 
         // Publicar via MQTT
+        console.log('Estado MQTT antes de publicar:', mqttClient.connected ? 'conectado' : 'desconectado');
         const simpleMessage = { test: 'hola desde r3hub', timestamp: Date.now() };
         mqttClient.publish('r3net/global/messages', JSON.stringify(simpleMessage), { qos: 1 }, (err) => {
           if (err) {
             console.error('ERROR publicando MQTT:', err);
           } else {
             console.log('Mensaje simple publicado OK en MQTT');
+            setTimeout(() => {
+              console.log('Estado MQTT después de publicar:', mqttClient.connected ? 'conectado' : 'desconectado');
+            }, 1000);
           }
         });
 

@@ -119,6 +119,7 @@ function startCLI() {
       message.signature = Buffer.from(signature).toString('base64');
 
       // Enviar
+      console.log('Enviando mensaje JSON:', JSON.stringify(message));
       ws.send(JSON.stringify(message));
       console.log('Mensaje enviado');
 

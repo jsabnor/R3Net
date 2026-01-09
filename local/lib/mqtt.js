@@ -1,54 +1,57 @@
-import mqtt from 'async-mqtt';
+import net from 'net';
 
-const MQTT_URL = process.env.R3NET_MQTT_URL;
-const REGION = process.env.R3NET_REGION || 'local';
-const NODE_ID = process.env.R3NET_NODE_ID || 'r3hub-01';
+let tcpClient;
 
 export async function initMQTT() {
-  const options = {
-    username: process.env.R3NET_MQTT_USER || 'r3net',
-    password: process.env.R3NET_MQTT_PASS || 'r3net',
-    keepalive: 60,
-    reconnectPeriod: 1000,
-    connectTimeout: 30000
-  };
-  const client = mqtt.connect(MQTT_URL, options);
-
   return new Promise((resolve, reject) => {
-    client.on('connect', () => {
-      console.log('r3-hub conectado a MQTT');
-
-      // Suscribirse a mensajes entrantes para este nodo
-      client.subscribe(`r3net/local/${NODE_ID}/messages`);
-
-      // Suscribirse a global/regional para rutas
-      client.subscribe('r3net/global/routes');
-      client.subscribe(`r3net/region/${REGION}/routes`);
-
-      resolve(client);
+    const [host, port] = MQTT_URL.replace('mqtt://', '').split(':');
+    
+    tcpClient = net.createConnection({ host, port: parseInt(port) }, () => {
+      console.log('r3-hub conectado via TCP');
+      
+      // Enviar CONNECT packet simple (MQTT protocol)
+      const connectPacket = Buffer.from([
+        0x10, 0x0C, // Fixed header
+        0x00, 0x04, 0x4D, 0x51, 0x54, 0x54, // Protocol name
+        0x04, // Protocol level
+        0x02, // Connect flags (clean session)
+        0x00, 0x3C // Keep alive
+      ]);
+      tcpClient.write(connectPacket);
+      
+      resolve(tcpClient);
     });
 
-    client.on('disconnect', () => {
-      console.log('r3-hub DESCONECTADO de MQTT');
-    });
-
-    client.on('offline', () => {
-      console.log('r3-hub OFFLINE MQTT');
-    });
-
-    client.on('reconnect', () => {
-      console.log('r3-hub RECONECTANDO a MQTT');
-    });
-
-    client.on('error', (err) => {
-      console.error('Error MQTT en r3-hub:', err);
+    tcpClient.on('error', (err) => {
+      console.error('Error TCP en r3-hub:', err);
       reject(err);
     });
 
-    client.on('message', (topic, message) => {
-      // Manejar mensajes entrantes (ej. respuestas)
-      console.log(`Mensaje MQTT en r3-hub: ${topic}`);
-      // Enviar a cliente correspondiente
+    tcpClient.on('data', (data) => {
+      // Handle MQTT responses if needed
+      console.log('Datos TCP recibidos:', data);
     });
   });
+}
+
+export function publish(topic, message) {
+  if (tcpClient && tcpClient.writable) {
+    const topicBytes = Buffer.from(topic, 'utf8');
+    const messageBytes = Buffer.from(message, 'utf8');
+    
+    const remainingLength = 2 + topicBytes.length + messageBytes.length;
+    const fixedHeader = Buffer.from([0x30, remainingLength]); // PUBLISH packet
+    
+    const packet = Buffer.concat([
+      fixedHeader,
+      Buffer.from([0x00, topicBytes.length]), // Topic length
+      topicBytes,
+      messageBytes
+    ]);
+    
+    tcpClient.write(packet);
+    console.log('Mensaje enviado via TCP');
+    return true;
+  }
+  return false;
 }

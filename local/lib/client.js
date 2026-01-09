@@ -44,19 +44,13 @@ export function handleClientConnection(ws, mqttClient) {
           timestamp: Math.floor(Date.now() / 1000)
         };
 
-        // Publicar via MQTT
-        console.log('Estado MQTT antes de publicar:', mqttClient.connected ? 'conectado' : 'desconectado');
-        const simpleMessage = { test: 'hola desde r3hub', timestamp: Date.now() };
-        mqttClient.publish('test', JSON.stringify(simpleMessage), { qos: 0 }, (err) => {
-          if (err) {
-            console.error('ERROR publicando MQTT:', err);
-          } else {
-            console.log('Mensaje simple publicado OK en MQTT');
-            setTimeout(() => {
-              console.log('Estado MQTT después de publicar:', mqttClient.connected ? 'conectado' : 'desconectado');
-            }, 1000);
-          }
-        });
+        // Publicar via TCP
+        const success = mqttClient.publish('r3net/global/messages', JSON.stringify(simpleMessage));
+        if (success) {
+          console.log('Mensaje enviado via TCP');
+        } else {
+          console.log('Error enviando via TCP');
+        }
 
         ws.send(JSON.stringify({ type: 'sent', id: routedMessage.id }));
 

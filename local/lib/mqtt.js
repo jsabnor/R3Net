@@ -1,11 +1,11 @@
 import net from 'net';
 
-const MQTT_URL = process.env.R3NET_MQTT_URL;
+const MQTT_URL = process.env.R3NET_MQTT_URL || 'mqtt://10.0.0.1:1883';
 let tcpClient;
 
-export async function initMQTT() {
+export async function initMQTT(url = MQTT_URL) {
   return new Promise((resolve, reject) => {
-    const [host, port] = MQTT_URL.replace('mqtt://', '').split(':');
+    const [host, port] = url.replace('mqtt://', '').split(':');
     
     tcpClient = net.createConnection({ host, port: parseInt(port) }, () => {
       console.log('r3-hub conectado via TCP');

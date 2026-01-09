@@ -19,7 +19,7 @@ const WS_PORT = process.env.R3NET_WS_PORT || 8082;
 console.log('Iniciando r3-hub local R3Net...');
 
 const wss = new WebSocketServer({ port: WS_PORT });
-const mqttClient = await initMQTT();
+const mqttClient = await initMQTT(process.env.R3NET_MQTT_URL || 'mqtt://10.0.0.1:1883');
 
 wss.on('connection', (ws, req) => {
   console.log(`Cliente conectado desde ${req.socket.remoteAddress}`);

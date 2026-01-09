@@ -91,9 +91,9 @@ export function handleClientConnection(ws, mqttClient) {
 function verifySignature(message, pubkey) {
   try {
     const msgStr = JSON.stringify({ id: message.id, from: message.from, to: message.to, timestamp: message.timestamp, payload: message.payload });
-    const signature = nacl.util.decodeBase64(message.signature);
-    const publicKey = nacl.util.decodeBase64(pubkey);
-    return nacl.sign.detached.verify(nacl.util.decodeUTF8(msgStr), signature, publicKey);
+    const signature = Buffer.from(message.signature, 'base64');
+    const publicKey = Buffer.from(pubkey, 'base64');
+    return nacl.sign.detached.verify(Buffer.from(msgStr, 'utf8'), signature, publicKey);
   } catch (error) {
     console.error('Error verificando firma:', error);
     return false;

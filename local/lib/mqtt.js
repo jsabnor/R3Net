@@ -7,7 +7,10 @@ const NODE_ID = process.env.R3NET_NODE_ID || 'r3hub-01';
 export async function initMQTT() {
   const options = {
     username: process.env.R3NET_MQTT_USER || 'r3net',
-    password: process.env.R3NET_MQTT_PASS || 'r3net'
+    password: process.env.R3NET_MQTT_PASS || 'r3net',
+    keepalive: 60,
+    reconnectPeriod: 1000,
+    connectTimeout: 30000
   };
   const client = mqtt.connect(MQTT_URL, options);
 
@@ -26,7 +29,15 @@ export async function initMQTT() {
     });
 
     client.on('disconnect', () => {
-      console.log('r3-hub desconectado de MQTT');
+      console.log('r3-hub DESCONECTADO de MQTT');
+    });
+
+    client.on('offline', () => {
+      console.log('r3-hub OFFLINE MQTT');
+    });
+
+    client.on('reconnect', () => {
+      console.log('r3-hub RECONECTANDO a MQTT');
     });
 
     client.on('error', (err) => {

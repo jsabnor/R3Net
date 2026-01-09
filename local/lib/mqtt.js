@@ -1,5 +1,6 @@
 import net from 'net';
 
+const MQTT_URL = process.env.R3NET_MQTT_URL;
 let tcpClient;
 
 export async function initMQTT() {

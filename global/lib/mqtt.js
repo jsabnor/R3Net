@@ -18,6 +18,7 @@ export async function initMQTT(url) {
       client.subscribe('r3net/global/storeforward', { qos: 1 });
       client.subscribe('r3net/global/presence', { qos: 1 });
       client.subscribe('r3net/global/mobility', { qos: 1 });
+      client.subscribe('r3net/global/messages', { qos: 1 });
 
       resolve();
     });
@@ -47,6 +48,9 @@ function handleMessage(topic, message) {
       // Actualizar presencia
     } else if (topic === 'r3net/global/mobility') {
       // Gestionar movilidad
+    } else if (topic === 'r3net/global/messages') {
+      // Procesar mensaje entrante
+      console.log('Mensaje global recibido:', data);
     }
   } catch (error) {
     console.error('Error procesando mensaje MQTT:', error);

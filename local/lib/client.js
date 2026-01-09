@@ -20,7 +20,7 @@ export function handleClientConnection(ws, mqttClient) {
         clients.set(userIndicativo, { ws, lastSeen: Date.now(), pubkey: userPubkey });
 
         // Publicar presencia
-        mqttClient.publish('r3net/global/presence', JSON.stringify({
+        publish('r3net/global/presence', JSON.stringify({
           indicativo: userIndicativo,
           action: 'connect',
           node: process.env.R3NET_NODE_ID
@@ -46,7 +46,7 @@ export function handleClientConnection(ws, mqttClient) {
         };
 
         // Publicar via TCP
-        const success = mqttClient.publish('r3net/global/messages', JSON.stringify(simpleMessage));
+        const success = publish('r3net/global/messages', JSON.stringify(simpleMessage));
         if (success) {
           console.log('Mensaje enviado via TCP');
         } else {
@@ -72,7 +72,7 @@ export function handleClientConnection(ws, mqttClient) {
   ws.on('close', () => {
     if (userIndicativo) {
       clients.delete(userIndicativo);
-      mqttClient.publish('r3net/global/presence', JSON.stringify({
+      publish('r3net/global/presence', JSON.stringify({
         indicativo: userIndicativo,
         action: 'disconnect'
       }));

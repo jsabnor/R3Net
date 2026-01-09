@@ -6,6 +6,7 @@ import { initAPI } from './lib/api.js';
 import { initSync } from './lib/sync.js';
 
 const app = express();
+app.use(express.json());
 const server = createServer(app);
 
 // Variables de entorno

@@ -35,12 +35,17 @@
 
     <script src="https://cdn.jsdelivr.net/npm/tweetnacl@1.0.3/nacl.min.js"></script>
     <script>
+        // Función para codificar en base64
+        function encodeBase64(array) {
+            return btoa(String.fromCharCode.apply(null, array));
+        }
+
         document.getElementById('generateBtn').addEventListener('click', generateKeys);
 
         function generateKeys() {
             const keyPair = nacl.sign.keyPair();
-            const privateKeyHex = nacl.util.encodeBase64(keyPair.secretKey);
-            const publicKeyHex = nacl.util.encodeBase64(keyPair.publicKey);
+            const privateKeyHex = encodeBase64(keyPair.secretKey);
+            const publicKeyHex = encodeBase64(keyPair.publicKey);
 
             document.getElementById('privateKey').value = privateKeyHex;
             document.getElementById('publicKey').value = publicKeyHex;

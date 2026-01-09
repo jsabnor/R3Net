@@ -4,7 +4,11 @@ let client;
 
 export async function initMQTT(url) {
   return new Promise((resolve, reject) => {
-    client = mqtt.connect(url);
+    const options = {
+      username: process.env.R3NET_MQTT_USER || 'r3net',
+      password: process.env.R3NET_MQTT_PASS || 'r3net'
+    };
+    client = mqtt.connect(url, options);
 
     client.on('connect', () => {
       console.log('Conectado al broker MQTT global');

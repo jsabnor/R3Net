@@ -12,7 +12,10 @@ const PRIVATE_KEY_FILE = './r3net_private_key.json'; // Archivo descargado de ke
 // Cargar clave privada
 let privateKey, publicKey;
 try {
-  const fileContent = fs.readFileSync(PRIVATE_KEY_FILE, 'utf8');
+  let fileContent = fs.readFileSync(PRIVATE_KEY_FILE, 'utf8');
+  if (fileContent.charCodeAt(0) === 0xFEFF) {
+    fileContent = fileContent.slice(1); // Quitar BOM
+  }
   console.log('Contenido del archivo:', fileContent);
   const keyData = JSON.parse(fileContent);
   privateKey = nacl.util.decodeBase64(keyData.privateKey);

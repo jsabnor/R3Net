@@ -44,7 +44,7 @@ export function handleClientConnection(ws, mqttClient) {
 
         // Publicar via MQTT
         console.log('Estado MQTT antes de publicar:', mqttClient.connected ? 'conectado' : 'desconectado');
-        mqttClient.publish('r3net/global/messages', JSON.stringify(routedMessage), (err) => {
+        mqttClient.publish('test', JSON.stringify(routedMessage), (err) => {
           if (err) {
             console.error('Error publicando mensaje MQTT:', err);
           } else {

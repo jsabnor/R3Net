@@ -1,5 +1,6 @@
 import nacl from 'tweetnacl';
 import { v4 as uuidv4 } from 'uuid';
+import { publish } from './mqtt.js';
 
 const CLIENT_TIMEOUT = parseInt(process.env.R3NET_CLIENT_TIMEOUT) || 300;
 const clients = new Map(); // indicativo -> { ws, lastSeen, pubkey }

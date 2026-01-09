@@ -29,12 +29,14 @@ export function handleClientConnection(ws, mqttClient) {
         console.log(`Usuario ${userIndicativo} registrado en r3-hub`);
 
       } else if (message.type === 'message') {
+        console.log('Mensaje recibido del cliente:', message);
         // Verificar firma
         if (!verifySignature(message, userPubkey)) {
           ws.send(JSON.stringify({ type: 'error', message: 'Firma inválida' }));
           return;
         }
 
+        console.log('Firma verificada OK');
         // Enrutar mensaje
         const routedMessage = {
           id: uuidv4(),
@@ -42,6 +44,7 @@ export function handleClientConnection(ws, mqttClient) {
           timestamp: Math.floor(Date.now() / 1000)
         };
 
+        console.log('Enrutando mensaje:', routedMessage);
         // Publicar via MQTT
         mqttClient.publish('r3net/global/messages', JSON.stringify(routedMessage), { qos: 1 });
 

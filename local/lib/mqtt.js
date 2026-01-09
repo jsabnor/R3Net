@@ -1,4 +1,4 @@
-import mqtt from 'mqtt';
+import mqtt from 'async-mqtt';
 
 const MQTT_URL = process.env.R3NET_MQTT_URL;
 const REGION = process.env.R3NET_REGION || 'local';

@@ -9,6 +9,11 @@ yarn-error.log*
 .env.local
 .env.production
 
+# R3Net private keys
+**/r3net_private_key.json
+**/r3net_private_key_backup.json
+**/r3net_public_key.json
+
 # Logs
 *.log
 logs/
